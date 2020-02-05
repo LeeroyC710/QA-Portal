@@ -1,0 +1,26 @@
+node {
+    tools {
+              maven '3.6.3'
+              jdk 'jdk8'
+              }
+                stage("clone repository") {
+		                    git "https://github.com/"
+            	}
+                stage('--Test--'){
+                        steps{ 
+                             mvn clean package --projects api-common,portal-application-api
+
+                        }
+                }	
+                stage('--Portal-Appication-Core-api--'){
+                        steps{
+                                sh '''image="#########:8080/Portal-Appication-Core-api:build-${BUILD_NUMBER}"
+                                      docker build -t ${image} /var/lib/jenkins/QA-Portal/qa-portal-services/Portal-Appication-Core-api
+                                      docker push ${image}
+                                      ssh ##.##.##.##  << EOF
+                                      docker service update --image ${image} Portal-Appication-Core-api
+                                      '''
+                        }
+                }
+        }
+}
