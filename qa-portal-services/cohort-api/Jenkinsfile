@@ -1,0 +1,20 @@
+node {
+    tools {
+              maven '3.6.3'
+              jdk 'jdk8'
+              }
+                stage("clone repository") {
+		                    git "https://github.com/"
+            	}	
+                stage('--cohort-api--'){
+                        steps{
+                                sh '''image="#########:8080/cohort-api:build-${BUILD_NUMBER}"
+                                      docker build -t ${image} /var/lib/jenkins/QA-Portal/qa-portal-services/cohort-api
+                                      docker push ${image}
+                                      ssh ##.##.##.##  << EOF
+                                      docker service update --image ${image} cohort-api
+                                      '''
+                        }
+                }
+        }
+}
