@@ -4,12 +4,13 @@ node {
               jdk 'jdk8'
               }
                 stage("clone repository") {
-		                    git "https://github.com/"
+			git "https://github.com/Leeroyc710/QA-PORTAL" 
+		       }
 
             	}	
                 stage('--Test--'){
                         steps{ 
-                             mvn clean package --projects api-common,${PROJECT}
+                                mvn clean package --projects api-common,${PROJECT}
                         }  
                 }
                 stage('--portal-core:latest--'){
